@@ -7,7 +7,7 @@
 
 (defvar *xhtml* "http://www.w3.org/1999/xhtml")
 
-(defun scrape-glossary-page-harder (url)
+(defun scrape-glossary-page (url)
   (let ((document (chtml:parse
                    (drakma:http-request url)
                    (cxml-stp:make-builder))))
@@ -45,8 +45,8 @@
   (with-open-file (*standard-output* output-file :direction :output
                                      :if-exists :supersede :if-does-not-exist :create)
     (write-prefixes)
-    (scrape-glossary-page-harder "http://www.lispworks.com/documentation/HyperSpec/Body/26_glo_9.htm")
+    (scrape-glossary-page "http://www.lispworks.com/documentation/HyperSpec/Body/26_glo_9.htm")
     (dotimes (i 25)    ; there is no glossary for #\z, so just skip it.
-      (scrape-glossary-page-harder
+      (scrape-glossary-page
        (format nil "http://www.lispworks.com/documentation/HyperSpec/Body/26_glo_~c.htm"
                (code-char (+ i (char-code #\a))))))))
