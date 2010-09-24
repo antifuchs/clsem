@@ -35,11 +35,20 @@
 
 (defun scrape-chapter (url)
   (write-base)
-  (let ((hr-count 2))
+  (format t "<> a type:chapter.~%")
+  (let ((hr-count 2)
+        h2)
     (with-document (document url)
       (length
        (stp:filter-recursively
         (lambda (node)
+          (when (and (not h2)
+                     (typep node 'stp:element)
+                     (string-equal "h2" (stp:local-name node)))
+            (setf h2 node)
+            (format t "<> dc:title \"~A\" .~%"
+                    (string-trim '(#\Space #\Newline #\Return)
+                                 (stp:string-value h2))))
           (when (and (typep node 'stp:element)
                      (string-equal "hr" (stp:local-name node)))
             ;; TODO: for now, ignore issues.
@@ -99,7 +108,7 @@
              (dolist (defn definitions)
                (format t "<~a> :hasDefinition <~a#~a> .~%"
                        href href (definition-anchor defn))
-               (format t "<~a#~a> :defines \"~a\"; a type:~a .~%"
+               (format t "<~a#~a> dc:title \"~a\"; a type:~a .~%"
                        href (definition-anchor defn) (string-downcase defn)
                        (type-anchor type))))))
        document)
@@ -143,7 +152,7 @@
                      (string-equal "a" (stp:local-name node)))
             (cond ((stp:attribute-value node "name")
                    (setf current-entry (stp:attribute-value node "name"))
-                   (format t "<#~a> a type:glossary-item ;  :defines \"~a\".~%"
+                   (format t "<#~a> a type:glossary-item ;  dc:title \"~a\".~%"
                            current-entry
                            (stp:string-value (first (stp:filter-recursively (stp:of-name "b" *xhtml*)
                                                                             node))))
@@ -163,7 +172,8 @@
 
 (defun write-prefixes ()
   (format t "@prefix : <http://boinkor.net/ns/clhs-semantics/#>.~%~
-             @prefix type: <http://boinkor.net/ns/clhs-semantics/type#>.~%"))
+             @prefix type: <http://boinkor.net/ns/clhs-semantics/type#>.~%~
+             @prefix dc: <http://purl.org/dc/elements/1.1/>.~%"))
 
 (defun construct-url (prefix &rest components)
   (apply #'concatenate 'string prefix components))
