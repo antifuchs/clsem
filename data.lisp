@@ -24,6 +24,15 @@
                                "c_system.htm"
                                "c_types_.htm"))
 
+(defparameter *ambiguous-pages*
+              '("a__.htm" "a_abort.htm" "a_and.htm" "a_atom.htm" "a_bit.htm" "a_ch.htm"
+                "a_comple.htm" "a_cons.htm" "a_contin.htm" "a_eql.htm" "a_error.htm"
+                "a_float.htm" "a_fn.htm" "a_lambda.htm" "a_list.htm" "a_logica.htm" "a_member.htm"
+                "a_method.htm" "a_mod.htm" "a_muffle.htm" "a_nil.htm" "a_not.htm" "a_null.htm"
+                "a_or.htm" "a_pl.htm" "a_pn.htm" "a_ration.htm" "a_setf.htm" "a_sl.htm" "a_st.htm"
+                "a_store_.htm" "a_string.htm" "a_t.htm" "a_type.htm" "a_use_va.htm" "a_values.htm"
+                "a_vector.htm"))
+
 (defvar *chapter-pages*
     '("00_.htm" "01_.htm" "01_a.htm" "01_aa.htm" "01_ab.htm" "01_b.htm"
       "01_c.htm" "01_d.htm" "01_da.htm" "01_daa.htm" "01_dab.htm" "01_daba.htm"

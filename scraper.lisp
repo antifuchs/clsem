@@ -136,6 +136,37 @@
              t)))
        document))))
 
+(defun scrape-ambiguous-page (url)
+  (write-base)
+  (let ((hr-count 2)
+        name
+        (types ""))
+    (with-document (document url)
+      (stp:filter-recursively
+       (lambda (node)
+         (when (and (typep node 'stp:element)
+                    (string-equal "hr" (stp:local-name node)))
+           ;; TODO: for now, ignore issues.
+           (decf hr-count))
+         (when (and (typep node 'stp:element)
+                    (string-equal "h2" (stp:local-name node)))
+           (setf name (stp:string-value node)))
+         (when (and (> 2 hr-count 0)
+                    (typep node 'stp:element)
+                    (string-equal "a" (stp:local-name node)))
+           (when (stp:attribute-value node "href")
+             (format t "<#~a> :resolvesAmbiguity <~a#~a>.~%"
+                     (definition-anchor name)
+                     (stp:attribute-value node "href")
+                     (definition-anchor name))
+             (setf types (format nil "~a, ~a" types
+                                 (stp:string-value node)))
+             t)))
+       document))
+    (format t "<#~a> dc:title \"Ambiguous entry for ~a ~a\"; a type:ambiguous-entry .~%"
+            (definition-anchor name)
+            (subseq types 2) name)))
+
 ;;; The glossary:
 
 (defun scrape-glossary-page (url)
@@ -200,6 +231,9 @@
         (dolist (entry (scrape-dictionary-overview url))
           (with-url (url prefix "/Body/" entry)
             (scrape-dictionary-page url)))))
+    (dolist (ambiguous-page *ambiguous-pages*)
+      (with-url (url prefix "/Body/" ambiguous-page)
+        (scrape-ambiguous-page url)))
     ;; glossaries:
     (with-url (url prefix "/Body/" "26_glo_9.htm")
       (scrape-glossary-page url))
