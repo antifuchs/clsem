@@ -90,26 +90,29 @@
       (stp:filter-recursively
        (lambda (node)
          (when (child-link-p node)
-           (let ((href (stp:attribute-value node "href"))
-                 (type (stp:string-value
-                        (stp:find-recursively "i" node
-                                              :key (lambda (node)
-                                                     (when (typep node 'stp:element)
-                                                       (stp:local-name node)))
-                                              :test #'string-equal)))
-                 (definitions (cl-ppcre:split ", "
-                                              (stp:string-value
-                                               (stp:find-recursively "b" node
-                                                                     :key (lambda (node)
-                                                                            (when (typep node 'stp:element)
-                                                                              (stp:local-name node)))
-                                                                     :test #'string-equal)))))
+           (let* ((href (stp:attribute-value node "href"))
+                  (type (stp:string-value
+                         (stp:find-recursively "i" node
+                                               :key (lambda (node)
+                                                      (when (typep node 'stp:element)
+                                                        (stp:local-name node)))
+                                               :test #'string-equal)))
+                  (all-definitions (stp:string-value
+                                    (stp:find-recursively "b" node
+                                                          :key (lambda (node)
+                                                                 (when (typep node 'stp:element)
+                                                                   (stp:local-name node)))
+                                                          :test #'string-equal)))
+                  (definitions (cl-ppcre:split ", " all-definitions)))
              (push href children)
-             (dolist (defn definitions)
-               (format t "<~a> :hasDefinition <~a#~a> .~%"
-                       href href (definition-anchor defn))
-               (format t "<~a#~a> dc:title \"~a\"; a type:~a .~%"
-                       href (definition-anchor defn) (string-downcase defn)
+             (format t "@base <~a>.~%" href)
+             (format t "<> dc:title \"~a\"; a type:dictionary-page .~%"
+                     (format nil "~a ~a" type (string-downcase all-definitions)))
+             (format t "<> :defines ~{<#~a>~^, ~} .~%"
+                     (mapcar #'definition-anchor definitions))
+             (dolist (defn definitions) 
+               (format t "<#~a> dc:title \"~a\"; a type:~a .~%"
+                       (definition-anchor defn) (string-downcase defn)
                        (type-anchor type))))))
        document)
       children)))
