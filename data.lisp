@@ -144,10 +144,7 @@
       "23_aa.htm" "23_ab.htm" "23_aba.htm" "23_ac.htm" "23_aca.htm" "23_acb.htm"
       "24_.htm" "24_a.htm" "24_aa.htm" "24_ab.htm" "24_aba.htm" "24_abaa.htm"
       "25_.htm" "25_a.htm" "25_aa.htm" "25_ab.htm" "25_ac.htm" "25_ad.htm"
-      "25_ada.htm" "25_adb.htm" "25_adc.htm" "25_add.htm" "26_.htm" "26_a.htm"
-      "26_glo_9.htm" "26_glo_a.htm" "26_glo_b.htm" "26_glo_c.htm" "26_glo_d.htm" "26_glo_e.htm"
-      "26_glo_f.htm" "26_glo_g.htm" "26_glo_h.htm" "26_glo_i.htm" "26_glo_k.htm" "26_glo_l.htm"
-      "26_glo_m.htm" "26_glo_n.htm" "26_glo_o.htm" "26_glo_p.htm" "26_glo_q.htm" "26_glo_r.htm"
-      "26_glo_s.htm" "26_glo_t.htm" "26_glo_u.htm" "26_glo_v.htm" "26_glo_w.htm" "26_glo_y.htm"
+      "25_ada.htm" "25_adb.htm" "25_adc.htm" "25_add.htm"
+      ;; Elided glossary pages.
       "27_.htm" "27_a.htm" "27_aa.htm" "27_ab.htm" "27_ac.htm" "27_ad.htm"
       "27_ae.htm" "27_af.htm" "27_ag.htm"))
